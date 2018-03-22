@@ -3,12 +3,6 @@ module.exports = function(grunt) {
     const parsedIconPicker = 'prod/src/js/iconpicker.js';
     const tempIconsFile = '.icons.temp';
     grunt.initConfig({
-        download: {
-            somefile: {
-                src: ['https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.0.8/advanced-options/metadata/icons.yml'],
-                dest: tempIconsFile
-            },
-        },
         yaml: {
             getIcons: {
                 options: {
@@ -40,7 +34,7 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: false,
-                    src: [tempIconsFile],
+                    src: ['./data/icons.yml'],
                     dest: tempIconsFile
                 }]
             },
@@ -149,7 +143,6 @@ module.exports = function(grunt) {
 
     // Register tasks
     grunt.registerTask('default', [
-        'download',
         'yaml',
         'string-replace',
         'clean:dist',
