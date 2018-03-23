@@ -34,7 +34,7 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: false,
-                    src: ['./data/icons.yml'],
+                    src: ['./siren/icons.yml'],
                     dest: tempIconsFile
                 }]
             },
@@ -60,7 +60,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.css': [
-                        'src/less/iconpicker.less'
+                        'src/less/iconpicker.less',
+                        'siren/fontawesome-all.css'
                     ]
                 }
             },
@@ -71,7 +72,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.min.css': [
-                        'src/less/iconpicker.less'
+                        'src/less/iconpicker.less',
+                        'siren/fontawesome-all.css'
                     ]
                 }
             }
