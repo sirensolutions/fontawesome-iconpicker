@@ -550,7 +550,7 @@
                         for (var g = 0; g < this.options.icons[d].searchTerms.length; g++) {
                             f = f + this.options.icons[d].searchTerms[g] + " ";
                         }
-                        this.iconpicker.find(".iconpicker-items").append(e.attr("search-terms", f));
+                        this.iconpicker.find(".iconpicker-items").append(e.attr("data-search-terms", f));
                     }
                 }
             }
@@ -930,7 +930,7 @@
                 this.iconpicker.find(".iconpicker-item").each(function() {
                     var b = a(this);
                     var e = b.attr("title").toLowerCase();
-                    var f = b.attr("search-terms") ? b.attr("search-terms").toLowerCase() : "";
+                    var f = b.attr("data-search-terms") ? b.attr("data-search-terms").toLowerCase() : "";
                     e = e + " " + f;
                     var g = false;
                     try {

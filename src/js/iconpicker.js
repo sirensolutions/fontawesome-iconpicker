@@ -257,7 +257,7 @@
                                 searchTerms = searchTerms + this.options.icons[i].searchTerms[j] + ' ';
                             }
                             this.iconpicker.find('.iconpicker-items').append(itemElement
-                                .attr('search-terms', searchTerms));
+                                .attr('data-search-terms', searchTerms));
                         }
 
                     }
@@ -713,7 +713,7 @@
                     this.iconpicker.find('.iconpicker-item').each(function() {
                         var $this = $(this);
                         var text = $this.attr('title').toLowerCase();
-                        var searchTerms = $this.attr('search-terms') ? $this.attr('search-terms').toLowerCase() : '';
+                        var searchTerms = $this.attr('data-search-terms') ? $this.attr('data-search-terms').toLowerCase() : '';
                         text = text + ' ' + searchTerms;
                         var regex = false;
                         try {
