@@ -3,12 +3,6 @@ module.exports = function(grunt) {
     const parsedIconPicker = 'prod/src/js/iconpicker.js';
     const tempIconsFile = '.icons.temp';
     grunt.initConfig({
-        download: {
-            somefile: {
-                src: ['https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.0.8/advanced-options/metadata/icons.yml'],
-                dest: tempIconsFile
-            },
-        },
         yaml: {
             getIcons: {
                 options: {
@@ -52,7 +46,7 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     expand: false,
-                    src: [tempIconsFile],
+                    src: ['node_modules/font-awesome-5/metadata/icons.yml'],
                     dest: tempIconsFile
                 }]
             },
@@ -60,12 +54,15 @@ module.exports = function(grunt) {
         'string-replace': {
             dist: {
                 files: {
-                    'prod/': ['src/js/iconpicker.js'],
+                    'prod/': ['src/js/iconpicker.js', 'node_modules/font-awesome-5/css/fontawesome-all.css'],
                 },
                 options: {
                     replacements: [{
                         pattern: '//###REPLACE-WITH-FONT-AWESOME-5-FONTS###',
                         replacement: "<%= grunt.file.read('" + tempIconsFile + "') %>"
+                    }, {
+                        pattern: /\.\.\/webfonts/g,
+                        replacement: '../../node_modules/font-awesome-5/webfonts'
                     }]
                 }
             }
@@ -78,7 +75,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.css': [
-                        'src/less/iconpicker.less'
+                        'src/less/iconpicker.less',
+                        'prod/node_modules/font-awesome-5/css/fontawesome-all.css'
                     ]
                 }
             },
@@ -89,7 +87,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.min.css': [
-                        'src/less/iconpicker.less'
+                        'src/less/iconpicker.less',
+                        'prod/node_modules/font-awesome-5/css/fontawesome-all.css'
                     ]
                 }
             }
@@ -161,7 +160,6 @@ module.exports = function(grunt) {
 
     // Register tasks
     grunt.registerTask('default', [
-        'download',
         'yaml',
         'string-replace',
         'clean:dist',
