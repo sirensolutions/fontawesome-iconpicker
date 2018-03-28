@@ -11,3 +11,6 @@ Thumbs.db
 static_server.js
 *.php
 .idea/
+prod/
+.icons.temp
+/bower_components/

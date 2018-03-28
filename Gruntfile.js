@@ -1,6 +1,72 @@
 'use strict';
 module.exports = function(grunt) {
+    const parsedIconPicker = 'prod/src/js/iconpicker.js';
+    const tempIconsFile = '.icons.temp';
     grunt.initConfig({
+        yaml: {
+            getIcons: {
+                options: {
+                    space: 2,
+                    disableDest: true,
+                    middleware: function(response, sourceJSON, src, dest) {
+                        let targetJSON = {
+                            icons: []
+                        };
+                        sourceJSON = JSON.parse(sourceJSON);
+                        Object.keys(sourceJSON).forEach(function(key) {
+                            let ele = sourceJSON[key];
+                            let icon = 'fa-' + key;
+                            ele.styles.forEach(function(style) {
+                                style = style.toLowerCase();
+                                if (style.startsWith('brand')) {
+                                    targetJSON.icons.push({
+                                        title: 'fab ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
+                                } else if (style.startsWith('solid')) {
+                                    targetJSON.icons.push({
+                                        title: 'fas ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
+                                } else if (style.startsWith('regular')) {
+                                    targetJSON.icons.push({
+                                        title: 'far ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
+                                } else if (style.startsWith('light')) {
+                                    targetJSON.icons.push({
+                                        title: 'fal ' + icon,
+                                        searchTerms: ele.search.terms
+                                    });
+                                }
+                            });
+                        });
+                        grunt.file.write(dest, JSON.stringify(targetJSON));
+                    }
+                },
+                files: [{
+                    expand: false,
+                    src: ['node_modules/font-awesome-5/metadata/icons.yml'],
+                    dest: tempIconsFile
+                }]
+            },
+        },
+        'string-replace': {
+            dist: {
+                files: {
+                    'prod/': ['src/js/iconpicker.js', 'node_modules/font-awesome-5/css/fontawesome-all.css'],
+                },
+                options: {
+                    replacements: [{
+                        pattern: '//###REPLACE-WITH-FONT-AWESOME-5-FONTS###',
+                        replacement: "<%= grunt.file.read('" + tempIconsFile + "') %>"
+                    }, {
+                        pattern: /\.\.\/webfonts/g,
+                        replacement: '../../node_modules/font-awesome-5/webfonts'
+                    }]
+                }
+            }
+        },
         less: {
             dist: {
                 options: {
@@ -9,7 +75,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.css': [
-                        'src/less/iconpicker.less'
+                        'src/less/iconpicker.less',
+                        'prod/node_modules/font-awesome-5/css/fontawesome-all.css'
                     ]
                 }
             },
@@ -20,13 +87,14 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.min.css': [
-                        'src/less/iconpicker.less'
+                        'src/less/iconpicker.less',
+                        'prod/node_modules/font-awesome-5/css/fontawesome-all.css'
                     ]
                 }
             }
         },
         jsbeautifier: {
-            files: ['Gruntfile.js', 'src/js/*.js']
+            files: ['Gruntfile.js', 'src/js/*.js', parsedIconPicker]
         },
         uglify: {
             distMin: {
@@ -37,7 +105,7 @@ module.exports = function(grunt) {
                 files: {
                     'dist/js/fontawesome-iconpicker.min.js': [
                         'src/js/jquery.ui.pos.js',
-                        'src/js/iconpicker.js'
+                        parsedIconPicker
                     ]
                 }
             },
@@ -49,7 +117,7 @@ module.exports = function(grunt) {
                 files: {
                     'dist/js/fontawesome-iconpicker.js': [
                         'src/js/jquery.ui.pos.js',
-                        'src/js/iconpicker.js'
+                        parsedIconPicker
                     ]
                 }
             }
@@ -72,6 +140,10 @@ module.exports = function(grunt) {
             dist: [
                 'dist/css',
                 'dist/js/*.js'
+            ],
+            temp: [
+                tempIconsFile,
+                'prod/'
             ]
         }
     });
@@ -82,13 +154,19 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-jsbeautifier');
+    grunt.loadNpmTasks('grunt-yaml');
+    grunt.loadNpmTasks('grunt-http-download');
+    grunt.loadNpmTasks('grunt-string-replace');
 
     // Register tasks
     grunt.registerTask('default', [
-        'clean',
+        'yaml',
+        'string-replace',
+        'clean:dist',
         'less',
         'jsbeautifier',
-        'uglify'
+        'uglify',
+        'clean:temp'
     ]);
     grunt.registerTask('dev', [
         'watch'
