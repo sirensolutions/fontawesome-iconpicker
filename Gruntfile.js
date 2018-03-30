@@ -3,16 +3,6 @@ module.exports = function(grunt) {
     const parsedIconPicker = 'prod/src/js/iconpicker.js';
     const tempIconsFile = '.icons.temp';
     grunt.initConfig({
-        copy: {
-            main: {
-                files: [{
-                    expand: true,
-                    cwd: 'node_modules/font-awesome-5/',
-                    src: 'webfonts/*',
-                    dest: 'dist/'
-                }],
-            }
-        },
         yaml: {
             getIcons: {
                 options: {
@@ -82,8 +72,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.css': [
-                        'src/less/iconpicker.less',
-                        'node_modules/font-awesome-5/css/fontawesome-all.css'
+                        'src/less/iconpicker.less'
                     ]
                 }
             },
@@ -94,8 +83,7 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'dist/css/fontawesome-iconpicker.min.css': [
-                        'src/less/iconpicker.less',
-                        'node_modules/font-awesome-5/css/fontawesome-all.css'
+                        'src/less/iconpicker.less'
                     ]
                 }
             }
@@ -164,14 +152,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-yaml');
     grunt.loadNpmTasks('grunt-http-download');
     grunt.loadNpmTasks('grunt-string-replace');
-    grunt.loadNpmTasks('grunt-contrib-copy');
 
     // Register tasks
     grunt.registerTask('default', [
         'yaml',
         'string-replace',
         'clean:dist',
-        'copy',
         'less',
         'jsbeautifier',
         'uglify',
