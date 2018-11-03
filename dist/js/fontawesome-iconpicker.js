@@ -539,21 +539,25 @@
                 c.preventDefault();
                 return false;
             };
-            for (var d in this.options.icons) {
-                if (typeof this.options.icons[d].title === "string") {
-                    var e = a(this.options.templates.iconpickerItem);
-                    e.find("i").addClass(this.options.fullClassFormatter(this.options.icons[d].title));
-                    e.data("iconpickerValue", this.options.icons[d].title).on("click.iconpicker", c);
-                    this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.options.icons[d].title));
-                    if (this.options.icons[d].searchTerms.length > 0) {
-                        var f = "";
-                        for (var g = 0; g < this.options.icons[d].searchTerms.length; g++) {
-                            f = f + this.options.icons[d].searchTerms[g] + " ";
+            var d = a(this.options.templates.iconpickerItem);
+            var e = [];
+            for (var f in this.options.icons) {
+                if (typeof this.options.icons[f].title === "string") {
+                    var g = d.clone();
+                    g.find("i").addClass(this.options.fullClassFormatter(this.options.icons[f].title));
+                    g.data("iconpickerValue", this.options.icons[f].title).on("click.iconpicker", c);
+                    g.attr("title", "." + this.options.icons[f].title);
+                    if (this.options.icons[f].searchTerms.length > 0) {
+                        var h = "";
+                        for (var i = 0; i < this.options.icons[f].searchTerms.length; i++) {
+                            h = h + this.options.icons[f].searchTerms[i] + " ";
                         }
-                        this.iconpicker.find(".iconpicker-items").append(e.attr("data-search-terms", f));
+                        g.attr("data-search-terms", h);
                     }
+                    e.push(g);
                 }
             }
+            this.iconpicker.find(".iconpicker-items").append(e);
             this.popover.find(".popover-content").append(this.iconpicker);
             return this.iconpicker;
         },
