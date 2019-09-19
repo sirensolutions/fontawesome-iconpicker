@@ -449,6 +449,8 @@
         searchInFooter: false,
         mustAccept: false,
         selectedCustomClass: "bg-primary",
+        replaceOriginalIcons: false,
+        customIcons: [],
         icons: [],
         fullClassFormatter: function(a) {
             return a;
@@ -540,6 +542,12 @@
                 return false;
             };
             var d = a(this.options.templates.iconpickerItem);
+            if (b.options.replaceOriginalIcons && b.options.customIcons.length > 0) {
+                b.options.icons = b.options.customIcons;
+            }
+            if (!b.options.replaceOriginalIcons) {
+                b.options.icons = b.options.icons.concat(b.options.customIcons);
+            }
             var e = [];
             for (var f in this.options.icons) {
                 if (typeof this.options.icons[f].title === "string") {

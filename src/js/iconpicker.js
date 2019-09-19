@@ -132,6 +132,8 @@
             searchInFooter: false, // If true, the search will be added to the footer instead of the title
             mustAccept: false, // only applicable when there's an iconpicker-btn-accept button in the popover footer
             selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
+            replaceOriginalIcons: false,
+            customIcons: [],
             icons: [], // list of icon classes (declared at the bottom of this script for maintainability)
             fullClassFormatter: function(val) {
                 return val;
@@ -242,6 +244,20 @@
                 };
 
                 var $itemElementTemplate = $(this.options.templates.iconpickerItem);
+
+                /* Begin code for adding custom icons */
+
+                //extra check to verify that atleast one custom icon exists.
+                //If no custom icon exists, then the original icons are not replaced even when the replaceOriginalIcons is set to true
+                if (_self.options.replaceOriginalIcons && _self.options.customIcons.length > 0) {
+                    _self.options.icons = _self.options.customIcons;
+                }
+                if (!_self.options.replaceOriginalIcons) {
+                    //even if no icon list is passed, a concatenation with empty array makes no difference
+                    _self.options.icons = _self.options.icons.concat(_self.options.customIcons);
+                }
+
+                /* End code for adding custom icons*/
                 var $elementsToAppend = [];
                 for (var i in this.options.icons) {
                     if (typeof this.options.icons[i].title === 'string') {
