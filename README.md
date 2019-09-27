@@ -102,6 +102,8 @@ var defaults = {
     searchInFooter: false, // If true, the search will be added to the footer instead of the title
     mustAccept: false, // only applicable when there's an iconpicker-btn-accept button in the popover footer
     selectedCustomClass: 'bg-primary', // Appends this class when to the selected item
+    replaceOriginalIcons: false // If true, replaces the original font awesome icons with the custom icons, otherwise, appends the custom icons to the font awesome icons. Defaults to false.
+    customIcons: [] //list of custom icons that replace or append to the original icons[] array
     icons: [], // list of icon classes (declared at the bottom of this script for maintainability)
     fullClassFormatter: function(val) {
         return 'fa ' + val;
