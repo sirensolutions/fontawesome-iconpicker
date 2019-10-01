@@ -1055,4 +1055,4 @@ const icons = require("../icons");
     c.defaultOptions = a.extend(c.defaultOptions, icons);
 });
 
-exports.icons = icons;
+module.exports = icons;

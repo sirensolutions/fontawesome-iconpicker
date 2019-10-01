@@ -861,4 +861,4 @@ const icons = require('../icons');
         Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, icons);
     }));
 
-exports.icons = icons;
+module.exports = icons;
