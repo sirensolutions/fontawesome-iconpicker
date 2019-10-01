@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(grunt) {
     const parsedIconPicker = 'prod/src/js/iconpicker.js';
-    const tempIconsFile = '.icons.temp';
+    const tempIconsFile = 'dist/icons.json';
     grunt.initConfig({
         yaml: {
             getIcons: {
@@ -137,7 +137,6 @@ module.exports = function(grunt) {
                 'dist/js/*.js'
             ],
             temp: [
-                tempIconsFile,
                 'prod/'
             ]
         }

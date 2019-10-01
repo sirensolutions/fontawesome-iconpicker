@@ -8,6 +8,14 @@
  *
  */
 
+require('jquery');
+require('font-awesome-5/css/all.css');
+require('../css/fontawesome-iconpicker.css');
+const icons = require('../icons.json');
+
+module.exports = icons;
+
+
 (function(factory) {
         "use strict";
         if (typeof define === 'function' && define.amd) {
@@ -812,7 +820,6 @@
 
                 this._unbindElementEvents();
                 this._unbindWindowEvents();
-
                 $(this.popover).remove();
 
                 this._trigger('iconpickerDestroyed');
@@ -856,5 +863,5 @@
         };
 
         // List of all Font Awesome icons without class prefix
-        Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, //###REPLACE-WITH-FONT-AWESOME-5-FONTS###);
-        }));
+        Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, icons);
+    }));
