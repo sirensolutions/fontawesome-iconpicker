@@ -352,7 +352,15 @@
     var c = a.ui.position;
 });
 
-const icons = require("../icons");
+require("jquery");
+
+require("font-awesome-5/css/all.css");
+
+require("../css/fontawesome-iconpicker.css");
+
+const icons = require("../icons.json");
+
+module.exports = icons;
 
 (function(a) {
     "use strict";
@@ -1031,6 +1039,7 @@ const icons = require("../icons");
                 this.input.prop("disabled", false);
                 return true;
             }
+            json;
             return false;
         },
         isDisabled: function() {
@@ -1054,5 +1063,3 @@ const icons = require("../icons");
     };
     c.defaultOptions = a.extend(c.defaultOptions, icons);
 });
-
-module.exports = icons;

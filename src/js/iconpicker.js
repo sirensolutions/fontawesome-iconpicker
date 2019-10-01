@@ -8,7 +8,13 @@
  *
  */
 
-const icons = require('../icons');
+require('jquery');
+require('font-awesome-5/css/all.css');
+require('../css/fontawesome-iconpicker.css');
+const icons = require('../icons.json');
+
+module.exports = icons;
+
 
 (function(factory) {
         "use strict";
@@ -814,7 +820,6 @@ const icons = require('../icons');
 
                 this._unbindElementEvents();
                 this._unbindWindowEvents();
-
                 $(this.popover).remove();
 
                 this._trigger('iconpickerDestroyed');
@@ -860,5 +865,3 @@ const icons = require('../icons');
         // List of all Font Awesome icons without class prefix
         Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, icons);
     }));
-
-module.exports = icons;
