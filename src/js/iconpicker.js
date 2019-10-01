@@ -8,6 +8,8 @@
  *
  */
 
+const icons = require('../icons');
+
 (function(factory) {
         "use strict";
         if (typeof define === 'function' && define.amd) {
@@ -856,5 +858,7 @@
         };
 
         // List of all Font Awesome icons without class prefix
-        Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, //###REPLACE-WITH-FONT-AWESOME-5-FONTS###);
-        }));
+        Iconpicker.defaultOptions = $.extend(Iconpicker.defaultOptions, icons);
+    }));
+
+exports.icons = icons;
