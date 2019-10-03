@@ -360,7 +360,12 @@ require("../css/fontawesome-iconpicker.css");
 
 const icons = require("../icons.json");
 
-module.exports = icons;
+const iconNameMap = icons.icons.reduce(function(a, b) {
+    a[b.title] = b.searchTerms;
+    return a;
+});
+
+module.exports = iconNameMap;
 
 (function(a) {
     "use strict";
@@ -1039,7 +1044,6 @@ module.exports = icons;
                 this.input.prop("disabled", false);
                 return true;
             }
-            json;
             return false;
         },
         isDisabled: function() {

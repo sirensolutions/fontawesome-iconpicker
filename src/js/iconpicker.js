@@ -13,7 +13,11 @@ require('font-awesome-5/css/all.css');
 require('../css/fontawesome-iconpicker.css');
 const icons = require('../icons.json');
 
-module.exports = icons;
+const iconNameMap = icons.icons.reduce(function(map, obj) {
+    map[obj.title] = obj.searchTerms; //the value can be anything, it doesn't matter
+    return map;
+});
+module.exports = iconNameMap;
 
 
 (function(factory) {
