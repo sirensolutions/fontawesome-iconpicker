@@ -360,12 +360,13 @@ require("../css/fontawesome-iconpicker.css");
 
 const icons = require("../icons.json");
 
-const iconNameMap = icons.icons.reduce(function(a, b) {
-    a[b.title] = b.searchTerms;
-    return a;
+const allIconNames = new Set();
+
+icons.icons.forEach(function(a) {
+    allIconNames.add(a.title);
 });
 
-module.exports = iconNameMap;
+module.exports = allIconNames;
 
 (function(a) {
     "use strict";
