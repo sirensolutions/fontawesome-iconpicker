@@ -737,28 +737,34 @@ module.exports = allIconNames;
             },
             filter: function(filterText) {
                 if (_helpers.isEmpty(filterText)) {
-                    this.iconpicker.find('.iconpicker-item').show();
+                    this.iconpicker.find('.iconpicker-item').css('display', '');
                     return $(false);
                 } else {
                     var found = [];
+                    var show = [];
+                    var hide = [];
+
+                    var regex = false;
+                    try {
+                        regex = new RegExp('(?:^|\\W)' + filterText);
+                    } catch (e) {
+                        regex = false;
+                    }
+
                     this.iconpicker.find('.iconpicker-item').each(function() {
                         var $this = $(this);
                         var text = $this.attr('title').toLowerCase();
                         var searchTerms = $this.attr('data-search-terms') ? $this.attr('data-search-terms').toLowerCase() : '';
                         text = text + ' ' + searchTerms;
-                        var regex = false;
-                        try {
-                            regex = new RegExp('(^|\\W)' + filterText, 'g');
-                        } catch (e) {
-                            regex = false;
-                        }
-                        if ((regex !== false) && text.match(regex)) {
+                        if ((regex !== false) && regex.test(text)) {
                             found.push($this);
-                            $this.show();
+                            show.push(this);
                         } else {
-                            $this.hide();
+                            hide.push(this);
                         }
                     });
+                    $(show).css('display', '');
+                    $(hide).css('display', 'none');
                     return found;
                 }
             },

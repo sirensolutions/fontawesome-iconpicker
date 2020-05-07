@@ -952,28 +952,32 @@ module.exports = allIconNames;
         },
         filter: function(c) {
             if (b.isEmpty(c)) {
-                this.iconpicker.find(".iconpicker-item").show();
+                this.iconpicker.find(".iconpicker-item").css("display", "");
                 return a(false);
             } else {
                 var d = [];
+                var e = [];
+                var f = [];
+                var g = false;
+                try {
+                    g = new RegExp("(?:^|\\W)" + c);
+                } catch (a) {
+                    g = false;
+                }
                 this.iconpicker.find(".iconpicker-item").each(function() {
                     var b = a(this);
-                    var e = b.attr("title").toLowerCase();
-                    var f = b.attr("data-search-terms") ? b.attr("data-search-terms").toLowerCase() : "";
-                    e = e + " " + f;
-                    var g = false;
-                    try {
-                        g = new RegExp("(^|\\W)" + c, "g");
-                    } catch (a) {
-                        g = false;
-                    }
-                    if (g !== false && e.match(g)) {
+                    var c = b.attr("title").toLowerCase();
+                    var h = b.attr("data-search-terms") ? b.attr("data-search-terms").toLowerCase() : "";
+                    c = c + " " + h;
+                    if (g !== false && g.test(c)) {
                         d.push(b);
-                        b.show();
+                        e.push(this);
                     } else {
-                        b.hide();
+                        f.push(this);
                     }
                 });
+                a(e).css("display", "");
+                a(f).css("display", "none");
                 return d;
             }
         },
