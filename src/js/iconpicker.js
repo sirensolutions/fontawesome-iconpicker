@@ -54,6 +54,31 @@ module.exports = allIconNames;
             },
             throwError: function(text) {
                 throw "Font Awesome Icon Picker Exception: " + text;
+            },
+            debounce: function(fn, wait) {
+                var callData = null;
+
+                function onDebounceTimeout() {
+                    fn.apply(callData._self, callData.args);
+                    callData = null;
+                }
+
+                function cancel() {
+                    window.clearTimeout(callData && callData.timerId);
+                    callData = null;
+                }
+
+                function debounced() {
+                    cancel();
+                    callData = {
+                        _self: this,
+                        args: arguments,
+                        timerId: window.setTimeout(onDebounceTimeout, wait)
+                    };
+                };
+
+                debounced.cancel = cancel;
+                return debounced;
             }
         };
 
@@ -309,9 +334,22 @@ module.exports = allIconNames;
             _bindElementEvents: function() {
                 var _self = this;
 
-                this.getSearchInput().on('keyup.iconpicker', function() {
+                this.popoverInputFilter = _helpers.debounce(function() {
                     _self.filter($(this).val().toLowerCase());
-                });
+                }, 300)
+                this.inputFilter = _helpers.debounce(function(e) {
+                    if (!_helpers.inArray(e.keyCode, [38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86])) {
+                        _self.update();
+                    } else {
+                        _self._updateFormGroupStatus(_self.getValid(this.value) !== false);
+                    }
+                    if (_self.options.inputSearch === true) {
+                        _self.filter($(this).val().toLowerCase());
+                    }
+                    //_self.hide();
+                }, 300)
+
+                this.getSearchInput().on('keyup.iconpicker', this.popoverInputFilter);
 
                 this.getAcceptButton().on('click.iconpicker', function() {
                     var _picked = _self.iconpicker.find('.iconpicker-selected').get(0);
@@ -345,17 +383,7 @@ module.exports = allIconNames;
 
                 if (this.hasInput()) {
                     // Bind input keyup event
-                    this.input.on('keyup.iconpicker', function(e) {
-                        if (!_helpers.inArray(e.keyCode, [38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86])) {
-                            _self.update();
-                        } else {
-                            _self._updateFormGroupStatus(_self.getValid(this.value) !== false);
-                        }
-                        if (_self.options.inputSearch === true) {
-                            _self.filter($(this).val().toLowerCase());
-                        }
-                        //_self.hide();
-                    });
+                    this.input.on('keyup.iconpicker', this.inputFilter);
                 }
 
             },
@@ -389,6 +417,9 @@ module.exports = allIconNames;
                 return false;
             },
             _unbindElementEvents: function() {
+                this.popoverInputFilter.cancel();
+                this.inputFilter.cancel();
+
                 this.popover.off('.iconpicker');
                 this.element.off('.iconpicker');
 
