@@ -398,6 +398,27 @@ module.exports = allIconNames;
         },
         throwError: function(a) {
             throw "Font Awesome Icon Picker Exception: " + a;
+        },
+        debounce: function(a, b) {
+            var c = null;
+            function d() {
+                a.apply(c._self, c.args);
+                c = null;
+            }
+            function e() {
+                window.clearTimeout(c && c.timerId);
+                c = null;
+            }
+            function f() {
+                e();
+                c = {
+                    _self: this,
+                    args: arguments,
+                    timerId: window.setTimeout(d, b)
+                };
+            }
+            f.cancel = e;
+            return f;
         }
     };
     var c = function(d, e) {
@@ -594,9 +615,20 @@ module.exports = allIconNames;
         },
         _bindElementEvents: function() {
             var c = this;
-            this.getSearchInput().on("keyup.iconpicker", function() {
+            this.popoverInputFilter = b.debounce(function() {
                 c.filter(a(this).val().toLowerCase());
-            });
+            }, 300);
+            this.inputFilter = b.debounce(function(d) {
+                if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                    c.update();
+                } else {
+                    c._updateFormGroupStatus(c.getValid(this.value) !== false);
+                }
+                if (c.options.inputSearch === true) {
+                    c.filter(a(this).val().toLowerCase());
+                }
+            }, 300);
+            this.getSearchInput().on("keyup.iconpicker", this.popoverInputFilter);
             this.getAcceptButton().on("click.iconpicker", function() {
                 var a = c.iconpicker.find(".iconpicker-selected").get(0);
                 c.update(c.iconpickerValue);
@@ -623,16 +655,7 @@ module.exports = allIconNames;
                 });
             }
             if (this.hasInput()) {
-                this.input.on("keyup.iconpicker", function(d) {
-                    if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
-                        c.update();
-                    } else {
-                        c._updateFormGroupStatus(c.getValid(this.value) !== false);
-                    }
-                    if (c.options.inputSearch === true) {
-                        c.filter(a(this).val().toLowerCase());
-                    }
-                });
+                this.input.on("keyup.iconpicker", this.inputFilter);
             }
         },
         _bindWindowEvents: function() {
@@ -658,6 +681,8 @@ module.exports = allIconNames;
             return false;
         },
         _unbindElementEvents: function() {
+            this.popoverInputFilter.cancel();
+            this.inputFilter.cancel();
             this.popover.off(".iconpicker");
             this.element.off(".iconpicker");
             if (this.hasInput()) {
@@ -952,28 +977,32 @@ module.exports = allIconNames;
         },
         filter: function(c) {
             if (b.isEmpty(c)) {
-                this.iconpicker.find(".iconpicker-item").show();
+                this.iconpicker.find(".iconpicker-item").css("display", "");
                 return a(false);
             } else {
                 var d = [];
+                var e = [];
+                var f = [];
+                var g = false;
+                try {
+                    g = new RegExp("(?:^|\\W)" + c);
+                } catch (a) {
+                    g = false;
+                }
                 this.iconpicker.find(".iconpicker-item").each(function() {
                     var b = a(this);
-                    var e = b.attr("title").toLowerCase();
-                    var f = b.attr("data-search-terms") ? b.attr("data-search-terms").toLowerCase() : "";
-                    e = e + " " + f;
-                    var g = false;
-                    try {
-                        g = new RegExp("(^|\\W)" + c, "g");
-                    } catch (a) {
-                        g = false;
-                    }
-                    if (g !== false && e.match(g)) {
+                    var c = b.attr("title").toLowerCase();
+                    var h = b.attr("data-search-terms") ? b.attr("data-search-terms").toLowerCase() : "";
+                    c = c + " " + h;
+                    if (g !== false && g.test(c)) {
                         d.push(b);
-                        b.show();
+                        e.push(this);
                     } else {
-                        b.hide();
+                        f.push(this);
                     }
                 });
+                a(e).css("display", "");
+                a(f).css("display", "none");
                 return d;
             }
         },
