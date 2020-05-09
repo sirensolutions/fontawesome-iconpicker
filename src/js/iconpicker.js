@@ -9,7 +9,8 @@
  */
 
 require('jquery');
-require('font-awesome-5/css/all.css');
+// commented out to prevend loading the css file, while we have the less files in investigate
+//require('font-awesome-5/css/all.css');
 require('../css/fontawesome-iconpicker.css');
 const icons = require('../icons.json');
 
