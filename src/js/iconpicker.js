@@ -9,7 +9,8 @@
  */
 
 require('jquery');
-require('font-awesome-5/css/all.css');
+// commented out to prevend loading the css file, while we have the less files in investigate
+//require('font-awesome-5/css/all.css');
 require('../css/fontawesome-iconpicker.css');
 const icons = require('../icons.json');
 
@@ -299,18 +300,20 @@ module.exports = allIconNames;
                 /* End code for adding custom icons*/
                 var $elementsToAppend = [];
                 for (var i in this.options.icons) {
-                    if (typeof this.options.icons[i].title === 'string') {
+                    const icon = this.options.icons[i];
+                    const iconTitle = icon.title;
+                    if (typeof iconTitle === 'string') {
                         var itemElement = $itemElementTemplate.clone();
                         itemElement.find('i')
-                            .addClass(this.options.fullClassFormatter(this.options.icons[i].title));
-                        itemElement.data('iconpickerValue', this.options.icons[i].title)
+                            .addClass(this.options.fullClassFormatter(iconTitle));
+                        itemElement.data('iconpickerValue', iconTitle)
                             .on('click.iconpicker', itemClickFn);
 
-                        itemElement.attr('title', '.' + this.options.icons[i].title);
-                        if (this.options.icons[i].searchTerms.length > 0) {
+                        itemElement.attr('title', '.' + iconTitle);
+                        if (icon.searchTerms.length > 0) {
                             var searchTerms = '';
-                            for (var j = 0; j < this.options.icons[i].searchTerms.length; j++) {
-                                searchTerms = searchTerms + this.options.icons[i].searchTerms[j] + ' ';
+                            for (var j = 0; j < icon.searchTerms.length; j++) {
+                                searchTerms = searchTerms + icon.searchTerms[j] + ' ';
                             }
                             itemElement.attr('data-search-terms', searchTerms);
                         }

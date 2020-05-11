@@ -354,8 +354,6 @@
 
 require("jquery");
 
-require("font-awesome-5/css/all.css");
-
 require("../css/fontawesome-iconpicker.css");
 
 const icons = require("../icons.json");
